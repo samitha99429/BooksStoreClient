@@ -6,7 +6,7 @@ import "../styles/Home.css";
 import HeroBanner from "../components/HeroBanner";
 import TestimonialSlider from "../components/Testimonial";
 import HeroIntro from "../components/HeroIntro";
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 
 const Home = ({ isAuthenticated }) => {
   const [books, setBooks] = useState([]);
@@ -24,7 +24,7 @@ const Home = ({ isAuthenticated }) => {
 
   const fetchBooks = async () => {
     try {
-      const { data } = await axios.get("https://bookstoreserver-4fil.onrender.com/api/books/all");
+      const { data } = await axiosInstance.get("/books/all");
       setBooks(data);
     } catch (error) {
       console.error("Error fetching books:", error);
@@ -32,11 +32,8 @@ const Home = ({ isAuthenticated }) => {
   };
 
   const fetchFavorites = async () => {
-    const token = localStorage.getItem("token");
     try {
-      const { data } = await axios.get("https://bookstoreserver-4fil.onrender.com/api/books/favorites", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const { data } = await axiosInstance.get("/books/favorites");
       setFavorites(data);
     } catch (error) {
       console.error("Error fetching favorites:", error);
@@ -44,9 +41,7 @@ const Home = ({ isAuthenticated }) => {
   };
 
   const handleFavouriteClick = async (book) => {
-    const token = localStorage.getItem("token");
-
-    if (!token) {
+    if (!localStorage.getItem("token")) {
       navigate("/login");
       return;
     }
@@ -54,9 +49,7 @@ const Home = ({ isAuthenticated }) => {
     const isFavorite = favorites.some((fav) => fav.bookId === book.id);
     try {
       if (isFavorite) {
-        await axios.delete(`https://bookstoreserver-4fil.onrender.com/api/books/favorites/${book.id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        await axiosInstance.delete(`/books/favorites/${book.id}`);
         setFavorites(favorites.filter((fav) => fav.bookId !== book.id));
       } else {
         const favoriteData = {
@@ -65,9 +58,7 @@ const Home = ({ isAuthenticated }) => {
           authors: book.volumeInfo.authors,
           thumbnail: book.volumeInfo.imageLinks?.thumbnail,
         };
-        const { data } = await axios.post("https://bookstoreserver-4fil.onrender.com/api/books/favorites", favoriteData, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const { data } = await axiosInstance.post("/books/favorites", favoriteData);
         setFavorites([...favorites, data]);
       }
     } catch (error) {
