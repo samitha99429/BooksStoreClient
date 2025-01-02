@@ -9,7 +9,7 @@ const Favourites = () => {
     const fetchFavorites = async () => {
       const token = localStorage.getItem("token");
       try {
-        const response = await axios.get("http://localhost:3001/api/books/favorites", {
+        const response = await axios.get("https://bookstoreserver-4fil.onrender.com/api/books/favorites", {
           headers: { Authorization: `Bearer ${token}` },
         });
 

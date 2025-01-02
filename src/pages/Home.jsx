@@ -24,7 +24,7 @@ const Home = ({ isAuthenticated }) => {
 
   const fetchBooks = async () => {
     try {
-      const { data } = await axios.get("http://localhost:3001/api/books/all");
+      const { data } = await axios.get("https://bookstoreserver-4fil.onrender.com/api/books/all");
       setBooks(data);
     } catch (error) {
       console.error("Error fetching books:", error);
@@ -34,7 +34,7 @@ const Home = ({ isAuthenticated }) => {
   const fetchFavorites = async () => {
     const token = localStorage.getItem("token");
     try {
-      const { data } = await axios.get("http://localhost:3001/api/books/favorites", {
+      const { data } = await axios.get("https://bookstoreserver-4fil.onrender.com/api/books/favorites", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setFavorites(data);
@@ -54,7 +54,7 @@ const Home = ({ isAuthenticated }) => {
     const isFavorite = favorites.some((fav) => fav.bookId === book.id);
     try {
       if (isFavorite) {
-        await axios.delete(`http://localhost:3001/api/books/favorites/${book.id}`, {
+        await axios.delete(`https://bookstoreserver-4fil.onrender.com/api/books/favorites/${book.id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setFavorites(favorites.filter((fav) => fav.bookId !== book.id));
@@ -65,7 +65,7 @@ const Home = ({ isAuthenticated }) => {
           authors: book.volumeInfo.authors,
           thumbnail: book.volumeInfo.imageLinks?.thumbnail,
         };
-        const { data } = await axios.post("http://localhost:3001/api/books/favorites", favoriteData, {
+        const { data } = await axios.post("https://bookstoreserver-4fil.onrender.com/api/books/favorites", favoriteData, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setFavorites([...favorites, data]);
