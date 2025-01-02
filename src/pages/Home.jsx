@@ -6,7 +6,7 @@ import "../styles/Home.css";
 import HeroBanner from "../components/HeroBanner";
 import TestimonialSlider from "../components/Testimonial";
 import HeroIntro from "../components/HeroIntro";
-import axiosInstance from "../utils/axiosInstance";
+import axiosInstance from "../utils/AxioInstance";
 
 const Home = ({ isAuthenticated }) => {
   const [books, setBooks] = useState([]);

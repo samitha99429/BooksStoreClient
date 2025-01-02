@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from "react";
 import BookCard from "../components/BookCard";
-import axios from "axios";
+import axiosInstance from "../utils/AxioInstance";
 
 const Favourites = () => {
   const [favorites, setFavorites] = useState([]);
 
   useEffect(() => {
     const fetchFavorites = async () => {
-      const token = localStorage.getItem("token");
       try {
-        const response = await axios.get("https://bookstoreserver-4fil.onrender.com/api/books/favorites", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await axiosInstance.get("/books/favorites");
 
         if (Array.isArray(response.data)) {
           const mappedData = response.data.map((item) => ({
@@ -62,4 +59,3 @@ const Favourites = () => {
 };
 
 export default Favourites;
-
